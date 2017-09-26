@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		#box{
+			width: 790px;
+			height: 340px;
+			position: relative;
+			margin: 30px auto;
+			overflow: hidden;
+		}
+		#box ul{
+			width: 100%;
+			position: absolute;
+			left:0;
+		}
+		#box li{
+			list-style: none;
+			float: left;
+		}
+		#box li img{
+			vertical-align: middle;
+		}
+		#box div{
+			height: 70px;
+			width: 100%;
+			background-color: rgba(0,0,0,.6);
+			position: absolute;
+			bottom: 0;
+			font-family: "微软雅黑";
+			color:#fff;
+			text-indent: 20px;
+		}
+		#box div h3{
+			line-height: 40px;
+		}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<ul>
+			<li><img src="imgaes/1.jpg" alt=""></li>
+			<li><img src="imgaes/2.jpg" alt=""></li>
+			<li><img src="imgaes/3.jpg" alt=""></li>
+			<li><img src="imgaes/4.jpg" alt=""></li>
+			<li><img src="imgaes/5.jpg" alt=""></li>
+			<li><img src="imgaes/6.jpg" alt=""></li>
+		</ul>
+		<div>
+			<h3></h3>
+			<p></p>
+		</div>
+	</div>
+	<script src="js/move.js"></script>
+	<script>
+		var ul = document.querySelector("ul");
+		var div = document.querySelector("#box div");
+		var n=0;
+		var timer;
+		var textArr = [
+			{"title":"超值钜惠0","content":"京东自营阳澄湖大闸蟹0"},
+			{"title":"超值钜惠1","content":"京东自营阳澄湖大闸蟹1"},
+			{"title":"超值钜惠2","content":"京东自营阳澄湖大闸蟹2"},
+			{"title":"超值钜惠3","content":"京东自营阳澄湖大闸蟹3"},
+			{"title":"超值钜惠4","content":"京东自营阳澄湖大闸蟹4"},
+			{"title":"超值钜惠5","content":"京东自营阳澄湖大闸蟹5"}
+		];
+		//把ul的内容复制一份
+		ul.innerHTML += ul.innerHTML;
+		//得到当前ul的宽度
+		var lis = document.querySelectorAll("li");
+		//获取当前ul宽度
+		var w = parseInt(getComputedStyle(ul).width);
+		console.log(w);
+		//将ul的宽度设置为所有li的宽度
+		ul.style.width = w * lis.length + 'px';
+		// //添加文字说明
+		div.innerHTML = "<h3>"+textArr[0].title+"</h3><p>"+textArr[0].content+"</p>";
+		//开启定时器让定时器不断走
+		timer = setInterval(go,3000);
+		//核心运动函数
+		function go(){
+			n++;
+			//先让文字运动到下面
+			move(div,{bottom:-70},500,"linear",function(){
+				//当文字已经消失了，接着运动ul
+				move(ul,{left:-790*n},1000,"linear",function(){
+					//当图片到第二轮第一张时，将ul重置到开始位置
+					if(n == lis.length/2){
+						ul.style.left = 0;
+						n =0;
+					}
+					div.innerHTML = "<h3>"+textArr[n].title+"</h3><p>"+textArr[n].content+"</p>";
+					//再让文字运动上来
+					move(div,{bottom:0},500,"linear");
+				});
+			});
+		}
+	</script>
+</body>
+</html>

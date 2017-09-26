@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div{
+			width: 300px;
+			height: 100px;
+			background-color: green;
+			margin-bottom: 10px;
+		}
+		.active{
+			background-color: red;
+		}
+	</style>
+</head>
+<body>
+	<button>上一个</button>
+	<button>下一个</button>
+	<button>到顶部</button>
+	<button>到底部</button>
+	<div id="box">
+		<div class="active"></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+	<script>
+		var btns = document.querySelectorAll('button');
+		var divs = document.querySelectorAll('#box div');
+		var box = document.getElementById('box');
+		//存放当前元素的变量
+		var cur = divs[0];
+		//点击上一个按钮
+		btns[0].onclick = function(){
+			//先让当前的方块去掉class
+			cur.className='';
+			var prev = cur.previousElementSibling;
+			if(!prev){ //到底了
+				prev = box.lastElementChild;
+			}
+			prev.className = 'active';
+			cur = prev; //改完所有东西了，把当前元素更新成下一个节点
+		}
+		//点击下一个按钮
+		btns[1].onclick = function(){
+			//先让当前的方块去掉class
+			cur.className='';
+			var next = cur.nextElementSibling;
+			if(!next){ //到底了
+				next = box.firstElementChild;
+			}
+			next.className = 'active';
+			cur = next; //改完所有东西了，把当前元素更新成下一个节点
+		}
+		//到顶部
+		btns[2].onclick = function(){
+			cur.className = '';
+			var top = box.firstElementChild;
+			top.className = 'active';
+			cur = top;
+		}
+		//到底部
+		btns[3].onclick = function(){
+			cur.className = '';
+			var bottom = box.lastElementChild;
+			bottom.className = 'active';
+			cur = bottom;
+		}
+	</script>
+</body>
+</html>

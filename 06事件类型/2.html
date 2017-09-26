@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>键盘控制div移动</title>
+	<style>
+		#box{
+			width: 100px;
+			height: 100px;
+			background-color: #dada00;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+	<script>
+		// 键盘控制div移动，要保证无卡顿，并且同时两个方向移动
+		var box = document.getElementById('box');
+		console.log(box)
+		var key = {
+			37:false,  //左
+			38:false,  //上
+			39:false,  //右
+			40:false   //下
+		}
+		document.onkeydown = function(ev){
+			key[ev.keyCode] = true;
+		}
+		document.onkeyup = function(ev){
+			key[ev.keyCode] = false;
+		}
+		setInterval(function(){
+			if(key[37]){   //左
+				box.style.left  = box.offsetLeft- 5 + 'px'
+			}
+			if(key[39]){    //右
+				box.style.left  = box.offsetLeft + 5 + 'px'
+			}
+			if(key[38]){   //上
+				box.style.top  = box.offsetTop - 5 + 'px'
+			}
+			if(key[40]){   //下
+				box.style.top  = box.offsetTop + 5 + 'px'
+			}
+		},16);
+	</script>
+</body>
+</html>

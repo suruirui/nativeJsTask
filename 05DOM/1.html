@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div{
+			width: 400px;
+			height: 50px;
+			margin-bottom: 10px;
+			background-color: green;
+		}
+	</style>
+</head>
+<body>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<script>
+		var divs = document.querySelectorAll('div');
+		
+		for(var i=0;i<divs.length;i++){
+			divs[i].onmouseover = function(){
+				//去掉所有颜色
+				for(var i=0;i<divs.length;i++){
+					divs[i].style.background  = 'green'
+				}
+				//当前方块变成黄色
+				this.style.background = 'yellow'
+				if(this.previousElementSibling){
+					this.previousElementSibling.style.background = 'red'
+				}
+				if(this.nextElementSibling){
+					this.nextElementSibling.style.background = 'red'
+				}
+			}
+		}
+	</script>
+</body>
+</html>

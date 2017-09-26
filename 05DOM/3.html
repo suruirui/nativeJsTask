@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		li{
+			list-style: none;
+			position: relative;
+			top:0;
+		}
+	</style>
+</head>
+<body>
+	<ul id="list">
+		<li>1111<button>上移</button><button>下移</button></li>
+		<li>2222<button>上移</button><button>下移</button></li>
+		<li>3333<button>上移</button><button>下移</button></li>
+		<li>4444<button>上移</button><button>下移</button></li>
+	</ul>
+	<script src="js/move.js"></script>
+	<script>
+		var list = document.getElementById('list');
+		var lis = document.querySelectorAll('li');
+		var h = lis[0].offsetHeight;
+		for(var i=0;i<lis.length;i++){
+			var up = lis[i].children[0];
+			var down = lis[i].children[1];
+
+			//上移功能
+			up.onclick = function() {
+				// console.log('上')
+				//在这里需要找到当前的li与上一个li
+				var cur = this.parentNode;
+				var prev = cur.previousElementSibling;
+				//没有上个li则走不动
+				if(!prev){
+					alert('走不动了');
+					return;
+				}
+				move(cur,{top:-h},200,'linear',end);
+				move(prev,{top:h},200,'linear',end);
+				
+				function end(){
+					//结构换一下
+					list.insertBefore(cur,prev);//prev插到cur前面
+					cur.style.top = 0;
+					prev.style.top = 0;
+				}
+			}
+
+			//下移功能
+			down.onclick = function() {
+				// console.log('下')
+				//在这里需要找到当前的li与下一个li
+				var cur = this.parentNode;
+				var next = cur.nextElementSibling;
+				//没有下个li则走不动
+				if(!next){
+					alert('走不动了');
+					return;
+				}
+				move(cur,{top:h},200,'linear',end);
+				move(next,{top:-h},200,'linear',end);
+				
+				function end(){
+					//结构换一下
+					list.insertBefore(next,cur);//cur插到next前面
+					cur.style.top = 0;
+					next.style.top = 0;
+				}
+			}
+		}
+	</script>
+</body>
+</html>
