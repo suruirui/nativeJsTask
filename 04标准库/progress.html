@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>进度条</title>
+	<style>
+		*{
+			margin:0;
+			padding: 0;
+			list-style: none;
+		}
+		#progress{
+			width: 400px;
+			margin:100px auto;
+		}
+		#progress li{
+			display: inline-block;
+			width: 8px;
+			height: 10px;
+			background: #E7A521;
+			margin: 2px;
+		}
+	</style>
+</head>
+<body>
+	<ul id="progress">
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	</ul>
+	<script>
+		var lis = document.querySelectorAll('li');
+
+		var n = 0;//当前方块的下标
+		var ln = 0; //前一个方块的下标
+
+		var timer = setInterval(function(){
+			lis[ln].style.backgroundColor = '#E7A521';
+			ln = n;
+			lis[n].style.backgroundColor = 'red';
+			n++;
+			n%=8;
+			// console.log(n);
+		},100);
+	</script>
+</body>
+</html>
