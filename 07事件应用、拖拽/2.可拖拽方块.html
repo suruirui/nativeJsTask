@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		#box{
+			width: 100px;
+			height: 100px;
+			background: #c78413;
+			position: absolute;
+			left: 300px;
+			top: 300px;
+		}
+	</style>
+</head>
+<body>
+	<div id="box"></div>
+</body>
+<script>
+	/*
+	 * 鼠标的移动事件要加给document
+	 * 所有的功能都是要放在鼠标移动的时候完成。鼠标移动的时候需要做两件事
+	 * 	1、改变鼠标的样式
+	 * 	2、改变盒子的样式
+	 * 
+	 * 要区分这两个事情需要知道鼠标有没有按下（需要用到一个变量区分）
+	 * 		1、鼠标没有按下，改变鼠标的样式
+	 * 			在鼠标移动的时候，要记录一下鼠标的样式信息
+	 * 		2、鼠标按下了，改变盒子的样式
+	 * 			在鼠标按下的时候，要记录一下盒子的样式信息
+	 */
+
+	var box = document.getElementById('box');
+	var dir = '';  //记录鼠标样式
+	var isDown = false;  //记录鼠标有没有按下
+	var msg = [];  //记录盒子的信息
+
+	//鼠标在box身上按下的时候记录一下盒子的信息
+	box.onmousedown = function(ev){
+		isDown = true;
+		msg = {
+			x:ev.clientX,
+			y:ev.clientY,
+			w:getPos(this).width,
+			h:getPos(this).height,
+			l:getPos(this).left,
+			r:getPos(this).right,
+			t:getPos(this).top,
+			b:getPos(this).bottom
+		};
+	};
+
+	document.onmouseup = function(){
+		isDown = false;
+	}
+
+	/*
+	 * 鼠标方向
+	 * 左		w-resize
+	 * 上		n-resize
+	 * 右		e-resize
+	 * 下		s-resize
+	 * 
+	 * 左上		nw-resize
+	 * 右上		ne-resize
+	 * 右下		se-resize
+	 * 左下		sw-resize
+	 * 
+	 */
+	 document.onmousemove = function(ev){
+	 	/*
+		 * 在这里需要做两件事情
+		 * 	1、鼠标没有按下，改变鼠标的样式 
+		 * 	2、鼠标按下了，改变盒子的样式
+		 */
+		if(!isDown){
+			//鼠标没有按下
+			/*
+			 * 1、判断的顺序不能变
+			 * 2、判断要用if
+			 */
+			 box.style.cursor = 'auto';  //在盒子中间的时候，让鼠标变成自动的
+			 dir = '';
+			 //上
+			 if(ev.clientY < getPos(box).top+10){
+				dir+='n';
+			 }	
+			 //下
+			 if(ev.clientY > getPos(box).bottom - 10){
+				dir += 's';
+			 }	
+			 //左
+			 if(ev.clientX < getPos(box).left + 10){
+				dir += 'w';
+			 }
+			 //右
+			 if(ev.clientX > getPos(box).right-10){
+				dir += 'e';
+			 }
+			 box.style.cursor = dir+'-resize';
+		}else{ 
+			//鼠标没有按下
+			//往右拖
+			if(dir.indexOf('e')!=-1){
+				/*
+				 * 这个条件成立，说明现在是往右边拖
+				 * w=原来的宽度(msg.w)+拖动的距离(ev.clientX-msg.x)
+				 */
+				var w = msg.w + ev.clientX - msg.x;
+				//如果移动的快的话会出现负数
+				if(w<100){
+					w = 100;
+				}
+				box.style.width = w +'px';
+			}
+			//往下拖
+			if(dir.indexOf('s')!=-1){
+				var h = msg.h + ev.clientY - msg.y;
+				//如果移动的话就会出现负数
+				if(h<100){
+					h = 100;
+				}
+				box.style.height = h +'px';
+			}
+
+			//往左拖
+			if(dir.indexOf('w')!=-1){
+				/*
+				 * w=原来的宽度(msg.w)+拖动的距离(msg.x-ev.clientX)
+				 * l=原来的距离(msg.l)-拖动的距离(msg.x-ev.clientX)
+				 */
+				
+				var w=msg.w+msg.x-ev.clientX;
+				var l=msg.l-(msg.x-ev.clientX);
+				
+				if(w<100){
+					w=100;
+					l=msg.r-100;
+				}
+				
+				box.style.width=w+'px';
+				box.style.left=l+'px';
+			}
+			
+			//往上拖
+			if(dir.indexOf('n')!=-1){
+				var h=msg.h+msg.y-ev.clientY;
+				var t=msg.t-(msg.y-ev.clientY);
+				
+				if(h<100){
+					h=100;
+					t=msg.b-100;
+				}
+				
+				box.style.height=h+'px';
+				box.style.top=t+'px';
+			}
+		}
+	 }
+	
+	function getPos(obj){
+		//方法返回元素的大小及其相对于视口的位置
+		return obj.getBoundingClientRect();
+	}
+
+</script>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>弹窗组件开发</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		ul>li{
+			display: inline-block;
+		}
+		/*弹窗*/
+		.box{
+			width: 300px;
+			height: 150px;
+			border: 1px solid #ccc;
+			margin: auto;
+			position: absolute;
+			border-radius: 5px;
+			background-color: #fff;
+		}
+		/*标题*/
+		.title{
+			width: 100%;
+			height: 40px;
+			text-align: left;
+			line-height: 40px;
+			padding: 0 20px;
+			font-size: 14px;
+			font-family: "微软雅黑";
+			background-color: #eee;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow:ellipsis;
+			box-sizing:border-box;
+			position: relative;
+		}
+		/*关闭按钮*/
+		.close{
+			width: 10px;
+			height: 10px;
+			position: absolute;
+			top: -5px;
+			right: 10px;
+			cursor: pointer;
+		}
+		/*内容区*/
+		.content{
+			padding: 20px;
+			font:12px '宋体';
+		}
+		/*内容区 段落*/
+		.content p{
+			margin-bottom: 20px;
+			line-height: 1.5;
+			position: relative;
+		}
+		/*内容区 确定按钮*/
+		.content .btn{
+			width: 80px;
+			height: 30px;
+			background-color: lightskyblue;
+			color: #fff;
+			text-align: center;
+			line-height: 30px;
+			margin: 0 auto;
+			border-radius: 5px;
+			cursor: pointer;
+			position: absolute;
+			left: 50%;
+			bottom: 10px;
+			transform:translate(-50%); 
+		}
+		.btn{
+			width: 80px;
+			height: 30px;
+			background-color: lightskyblue;
+			color: #fff;
+			text-align: center;
+			line-height: 30px;
+			margin: 0 auto;
+			border-radius: 5px;
+			cursor: pointer;
+			font-weight: bold;
+		}
+</style>
+</head>
+<body>
+<ul id="btns">
+	<li>
+		<div class="btn">上</div>
+	</li>
+	<li>
+		<div class="btn">下</div>
+	</li>
+	<li>
+		<div class="btn">左</div>
+	</li>
+	<li>
+		<div class="btn">右</div>
+	</li>
+	<li>
+		<div class="btn">中</div>
+	</li>
+</ul>
+<!--弹窗-->
+	<!-- <div class="box" id="box">
+		<div class="title">				
+			<span>标题</span>
+			<div class="close" id="close">×</div>
+		</div>
+		<div class="content">
+			<p>内容</p>
+			<div class="btn" id="btn">确定</div>
+		</div>
+	</div> -->
+
+</body>
+<script>
+	var btns = document.getElementById("btns");
+	var divs = btns.getElementsByTagName("div");
+	//上
+	divs[0].onclick = function(){
+		var ab = new ABox();
+		ab.init({
+			title:'登2录',
+			w:300,
+			h:150,
+			pos:'top'
+		});
+	}
+	//下
+	divs[1].onclick = function(){
+		var ab2 = new ABox();
+		ab2.init({
+			title:'登1录',
+			w:300,
+			h:150,
+			pos:'bottom'
+		});
+	}
+	//左
+	divs[2].onclick = function(){
+		var ab3 = new ABox();
+		ab3.init({
+			title:'登zuo录',
+			w:300,
+			h:150,
+			pos:'left'
+		});
+	}
+	//右
+	divs[3].onclick = function(){
+		var ab4 = new ABox();
+		ab4.init({
+			title:'登y录',
+			w:100,
+			h:350,
+			pos:'right'
+		});
+	}
+	//中
+	divs[4].onclick = function(){
+		var ab4 = new ABox();
+		ab4.init({
+			title:'登z录',
+			w:300,
+			h:150
+		});
+	}
+
+	function ABox(){
+		this.box = null;
+		this.defaults = {
+			title:'',
+			w:300,
+			h:150,
+			pos:'center'
+		}
+	}
+
+	ABox.prototype.init = function(settings){
+		extend(this.defaults,settings);
+		this.create();
+		this.close();
+	}
+	ABox.prototype.create = function(){
+		this.box = document.createElement("div");
+		this.box.className = "box";
+		this.box.innerHTML = '<div class="title"><span>'+this.defaults.title+'</span><div class="close" id="close">×</div></div><div class="content"><p>内容</p><div class="btn" id="btn">确定</div></div>';
+		document.body.appendChild(this.box);
+		this.view();
+
+	}
+
+	ABox.prototype.view = function(){
+		this.box.style.width = this.defaults.w +'px';
+		this.box.style.height = this.defaults.h +'px';
+		switch(this.defaults.pos){
+			case 'center':
+				console.log("center");
+				this.box.style.left = '50%';
+				this.box.style.top = '50%';
+				this.box.style.transform = 'translate(-50%,-50%)';
+				break;
+			case 'left':
+				this.box.style.left = 0;
+				this.box.style.top = '50%';
+				this.box.style.transform = 'translateY(-50%)';
+				break;
+			case 'right':
+				this.box.style.right = 0;
+				this.box.style.top = '50%';
+				this.box.style.transform = 'translateY(-50%)';
+				break;
+			case 'top':
+				this.box.style.left = '50%';
+				this.box.style.top = 0;
+				this.box.style.transform = 'translateX(-50%)';
+				break;
+			case 'bottom':
+				this.box.style.left = '50%';
+				this.box.style.bottom = 0;
+				this.box.style.transform = 'translateX(-50%)';
+				break;
+			default:
+				alert("没有这样的弹窗");
+				break;
+		}
+	}
+
+	//关闭
+	ABox.prototype.close = function(){
+		var close = this.box.children[0].children[1];
+		var confrim = this.box.children[1].children[1];
+		var that = this;
+		close.onclick = function(){
+			document.body.removeChild(that.box);
+		}
+		confrim.onclick = function(){
+			document.body.removeChild(that.box);
+		}
+	}
+	function extend(newObj,oldObj){
+		for(var attr in oldObj){
+			newObj[attr] = oldObj[attr];
+		}
+	}
+
+	ABox.prototype.drop = function(){
+
+	}
+</script>
+</html>
